@@ -3,7 +3,7 @@ import subprocess
 
 
 def _dot_var(v, verbose=False):
-    dot_var = '{} [labe="{}", color=orange, style=filled]\n'
+    dot_var = '{} [label="{}", color=orange, style=filled]\n'
 
     name = '' if v.name is None else v.name
     if verbose and v.data is not None:
@@ -14,7 +14,7 @@ def _dot_var(v, verbose=False):
 
 
 def _dot_func(f):
-    dot_func = '{} [lable="{}", color=lightblue, style=filled, shape=box]\n'
+    dot_func = '{} [label="{}", color=lightblue, style=filled, shape=box]\n'
     txt = dot_func.format(id(f), f.__class__.__name__)
 
     dot_edge = '{} -> {}\n'
