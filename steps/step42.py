@@ -27,7 +27,7 @@ class LinearRegression:
     def fit(self, x, y):
         for _ in range(self.iters):
             y_pred = self.predict(x)
-            loss = self.mean_squared_error(y, y_pred)
+            loss = F.mean_squared_error(y, y_pred)
 
             self.W.cleargrad()
             self.b.cleargrad()
