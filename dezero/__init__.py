@@ -21,6 +21,7 @@ else:
     from dezero.models import Model
 
     import dezero.functions
+    import dezero.optimizers
     import dezero.utils
 
 setup_variable()
