@@ -90,6 +90,38 @@ def transpose(x):
     return Transpose()(x)
 
 
+class GetItem(Function):
+    def __init__(self, slices):
+        self.slices = slices
+
+    def forward(self, x):
+        return x[self.slices]
+
+    def backward(self, gy):
+        x, = self.inputs
+        f = GetItemGrad(self.slices, x.shape)
+        return f(gy)
+
+
+class GetItemGrad(Function):
+    def __init__(self, slices, in_shape):
+        self.slices = slices
+        self.in_shape = in_shape
+
+    def forward(self, gy):
+        gx = np.zeros(self.in_shape)
+        np.add.at(gx, self.slices, gy)
+        return gx
+
+    def backward(self, ggx):
+        return get_item(ggx, self.slices)
+
+
+def get_item(x, slices):
+    f = GetItem(slices)
+    return f(x)
+
+
 class Sum(Function):
     def __init__(self, axis, keepdims) -> None:
         self.axis = axis
@@ -206,6 +238,35 @@ def sigmoid(x):
 def sigmoid_simple(x):
     x = as_variable(x)
     return 1 / (1 + exp(-x))
+
+
+class Softmax(Function):
+    def __init__(self, axis=1):
+        self.axis = axis
+
+    def forward(self, x):
+        y = x - x.max(axis=self.axis, keepdims=True)
+        y = np.exp(y)
+        y /= y.sum(axis=self.axis, keepdims=True)
+        return y
+
+    def backward(self, gy):
+        y = self.outputs[0]()
+        gx = y * gy
+        sumdx = gx.sum(axis=self.axis, keepdims=True)
+        gx -= y * sumdx
+        return gx
+
+
+def softmax(x, axis=1):
+    return Softmax(axis)(x)
+
+
+def softmax_simple(x, axis=1):
+    x = as_variable(x)
+    y = exp(x)
+    sum_y = sum(y, axis=axis, keepdims=True)
+    return y / sum_y
 
 
 class MeanSquaredError(Function):
