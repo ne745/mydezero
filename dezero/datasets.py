@@ -105,7 +105,7 @@ class MNIST(Dataset):
         label_path = get_file(url + files['label'])
 
         self.data = self._load_data(data_path)
-        self.label = self._load_labe(label_path)
+        self.label = self._load_label(label_path)
 
     def _load_label(self, filepath):
         with gzip.open(filepath, 'rb') as f:
