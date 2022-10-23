@@ -87,7 +87,7 @@ class Spiral(Dataset):
 class MNIST(Dataset):
     def __init__(
             self, train=True,
-            transform=Compose([Flatten, ToFloat(), Normalize(0., 255.)]),
+            transform=Compose([Flatten(), ToFloat(), Normalize(0., 255.)]),
             target_transform=None):
         super().__init__(train, transform, target_transform)
 
