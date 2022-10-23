@@ -254,6 +254,21 @@ def sigmoid_simple(x):
     return 1 / (1 + exp(-x))
 
 
+class ReLU(Function):
+    def forward(self, x):
+        return np.maximum(x, 0.0)
+
+    def backward(self, gy):
+        x, = self.inputs
+        mask = x.data > 0
+        gx = gy * mask
+        return gx
+
+
+def relu(x):
+    return ReLU()(x)
+
+
 class Softmax(Function):
     def __init__(self, axis=1):
         self.axis = axis
