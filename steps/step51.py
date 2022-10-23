@@ -27,7 +27,7 @@ def main():
     test_loader = DataLoader(test_set, batch_size, shuffle=False)
 
     model = MLP((hidden_size, 10), activation=F.relu)
-    optimizer = optimizers.SGD().setup(model)
+    optimizer = optimizers.Adam().setup(model)
 
     log = []
     for epoch in range(max_epoch):
